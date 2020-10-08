@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.sapient.project.exception.DealerSignupException;
 import com.sapient.project.model.DealerSignin;
 import com.sapient.project.model.DealerSignup;
 import com.sapient.project.response.ResponseMessage;
 import com.sapient.project.service.DealerSignupServiceImpl;
+
 
 @RestController
 @RequestMapping("/api")
@@ -38,9 +40,9 @@ public class DealerAuthController {
     	"mailId": "arc@xyz.com",
     	"phoneNumber": 9450762469
 	}*/
-	
+	//http://localhost:8081/api/signup
 	@PostMapping("/signup")
-	public ResponseEntity<ResponseMessage> registerDealer(@Valid @RequestBody DealerSignup dealer)
+	public ResponseEntity<ResponseMessage> registerDealer(@Valid @RequestBody DealerSignup dealer) throws DealerSignupException
 	{
 		ResponseMessage message;
 		if (dealerSignupService.existsDealerid(dealer.getDealerId())) {
@@ -67,11 +69,11 @@ public class DealerAuthController {
 		message=new ResponseMessage("Registered Successfully");
 		return new ResponseEntity<>(message, HttpStatus.CREATED);
 		}
-		catch(Exception e)
+		catch(DealerSignupException e)
 		{
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
 		}
-		
+
 	}
 	
 	/*@PostMapping("/signin")

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sapient.project.data.DealerSignupRepository;
 import com.sapient.project.model.DealerSignup;
+import com.sapient.project.exception.DealerSignupException;
 
 @Service
 @Transactional
@@ -20,23 +21,24 @@ public class DealerSignupServiceImpl implements DealerSignupService{
 	
 
 	@Override
-	public DealerSignup save(DealerSignup dealer) {
-		//try {
-			DealerSignup dealerObject =  repository.save(dealer);			
-		//}
-		//catch(Exception e) {
-			//log.error(e.getMessage(), e);
-			//throw new Exception(e.getMessage(),e);
-	//}
-		
-		//return null;
+	public DealerSignup save(DealerSignup dealer) throws DealerSignupException{
+		try {
+			DealerSignup dealerObject =  repository.save(dealer);	
 			return dealerObject;
+		}
+		catch(DataAccessException e) {
+			//log.error(e.getMessage(), e);
+			throw new DealerSignupException(e.getMessage(),e);
+		}
+
+
+			
 	}
 
 
 
 	@Override
-	public boolean existsDealerid(Long dealerid) {
+	public boolean existsDealerid(Long dealerid) throws DealerSignupException {
 		if(repository.findBydealerId(dealerid)!=null) {
 			return true;
 		}
@@ -46,7 +48,7 @@ public class DealerSignupServiceImpl implements DealerSignupService{
 
 
 	@Override
-	public boolean existsMailid(String mailid) {
+	public boolean existsMailid(String mailid) throws DealerSignupException{
 		if(repository.findBymailId(mailid)!=null)
 		{
 			return true;
@@ -57,7 +59,7 @@ public class DealerSignupServiceImpl implements DealerSignupService{
 
 
 	@Override
-	public boolean existsPhoneNumber(Long phonenumber) {
+	public boolean existsPhoneNumber(Long phonenumber) throws DealerSignupException {
 		if(repository.findByphoneNumber(phonenumber)!=null)
 		{
 			return true;
@@ -68,7 +70,7 @@ public class DealerSignupServiceImpl implements DealerSignupService{
 
 
 	@Override
-	public boolean existsUserid(String userid) {
+	public boolean existsUserid(String userid) throws DealerSignupException{
 		if(repository.findByuserId(userid)!=null)
 		{
 			return true;
