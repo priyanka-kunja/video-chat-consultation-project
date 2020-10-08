@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.sapient.project.exception.DealerSigninException;
 import com.sapient.project.exception.DealerSignupException;
 import com.sapient.project.model.DealerSignin;
 import com.sapient.project.model.DealerSignup;
@@ -32,23 +33,16 @@ public class DealerAuthController {
 	@Autowired
 	private DealerSigninServiceImpl dealerSigninService;
 	
-//	@Autowired
-//	PasswordEncoder encoder;
-	
-	
-	/* http://localhost:8083/api/signup
-	 {
-    	"userId": "sirip5997",
-    	"dealerId": 1002,
-    	"password": "2010-10-15",    	
-    	"mailId": "arc@xyz.com",
-    	"phoneNumber": 9450762469
 
-	}*/
+	
 	//http://localhost:8081/api/signup
-
-	
-	
+	/*{​​​​
+        "userId": "asd5997",
+        "dealerId": 1004,
+        "password": "2010-10-15",       
+        "mailId": "asdxyz@.com",
+        "phoneNumber": 94540762469
+   }*/
 
 	@PostMapping("/signup")
 	public ResponseEntity<ResponseMessage> registerDealer(@Valid @RequestBody DealerSignup dealer) throws DealerSignupException
@@ -59,9 +53,6 @@ public class DealerAuthController {
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 		if (dealerSignupService.existsUserid(dealer.getUserId())) {
-			/*return ResponseEntity
-					.badRequest()
-					.body(new ResponseMessage("Error: UserId is already taken!"));*/
 			message=new ResponseMessage("Error: UserID is already taken!");
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
@@ -84,19 +75,30 @@ public class DealerAuthController {
 		}
 
 	}
-	
+		
+		
+	//http://localhost:8081/api/signin
 	@PostMapping("/signin")
-	public ResponseEntity<ResponseMessage> authenticateUser(@Valid @RequestBody DealerSignin dealer) throws DealerSignupException
+	public ResponseEntity<ResponseMessage> authenticateUser(@Valid @RequestBody DealerSignin dealer) 
 	{
 		ResponseMessage message;
-		if(!dealerSignupService.existsUserid(dealer.getUserId()))
-			{
-			message=new ResponseMessage("Invalid UserID or password!");
-			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+		try {
+			if(!dealerSignupService.existsUserid(dealer.getUserId()))
+				{
+				message=new ResponseMessage("Invalid UserID or password!");
+				return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+				}
+		} catch (DealerSignupException e) {
+			e.printStackTrace();
+		}
+		try {
+			if (!dealerSigninService.validateDealer(dealer)) {
+				message=new ResponseMessage("Invalid UserID or password!");
+				return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 			}
-		if (!dealerSigninService.validateDealer(dealer)) {
-			message=new ResponseMessage("Invalid UserID or password!");
-			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+		} catch (DealerSigninException e) {
+			
+			e.printStackTrace();
 		}
 			return new ResponseEntity<>(new ResponseMessage("Successful login"), HttpStatus.CREATED);
 	

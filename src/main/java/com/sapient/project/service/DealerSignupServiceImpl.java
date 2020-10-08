@@ -29,13 +29,8 @@ public class DealerSignupServiceImpl implements DealerSignupService{
 		catch(DataAccessException e) {
 			//log.error(e.getMessage(), e);
 			throw new DealerSignupException(e.getMessage(),e);
-		}
-
-
-			
+		}	
 	}
-
-
 
 	@Override
 	public boolean existsDealerid(Long dealerid) throws DealerSignupException {
@@ -66,8 +61,6 @@ public class DealerSignupServiceImpl implements DealerSignupService{
 		}
 		return false;
 	}
-
-
 
 	@Override
 	public boolean existsUserid(String userid) throws DealerSignupException{
