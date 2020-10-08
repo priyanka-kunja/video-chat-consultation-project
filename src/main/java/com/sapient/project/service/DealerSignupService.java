@@ -13,7 +13,4 @@ public interface DealerSignupService {
 	 public boolean existsMailid(String userid) throws DealerSignupException;
 	 public boolean existsPhoneNumber(Long userid) throws DealerSignupException;
 
-
-
-
 }
