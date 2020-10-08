@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.sapient.project.model.DealerSignin;
 import com.sapient.project.model.DealerSignup;
 import com.sapient.project.response.ResponseMessage;
+import com.sapient.project.service.DealerSigninServiceImpl;
 import com.sapient.project.service.DealerSignupServiceImpl;
 
 @RestController
@@ -25,6 +26,9 @@ import com.sapient.project.service.DealerSignupServiceImpl;
 public class DealerAuthController {
 	@Autowired
 	private DealerSignupServiceImpl dealerSignupService;
+	
+	@Autowired
+	private DealerSigninServiceImpl dealerSigninService;
 	
 //	@Autowired
 //	PasswordEncoder encoder;
@@ -37,7 +41,7 @@ public class DealerAuthController {
     	"password": "2010-10-15",    	
     	"mailId": "arc@xyz.com",
     	"phoneNumber": 9450762469
-	}*/
+	} */
 	
 	@PostMapping("/signup")
 	public ResponseEntity<ResponseMessage> registerDealer(@Valid @RequestBody DealerSignup dealer)
@@ -74,7 +78,7 @@ public class DealerAuthController {
 		
 	}
 	
-	/*@PostMapping("/signin")
+	@PostMapping("/signin")
 	public ResponseEntity<ResponseMessage> authenticateUser(@Valid @RequestBody DealerSignin dealer)
 	{
 		ResponseMessage message;
@@ -83,13 +87,13 @@ public class DealerAuthController {
 			message=new ResponseMessage("Invalid UserID or password!");
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 			}
-		if (!dealerSignupService.validateDealer(dealer)) {
+		if (!dealerSigninService.validateDealer(dealer)) {
 			message=new ResponseMessage("Invalid UserID or password!");
 			return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
 		}
 			return new ResponseEntity<>(new ResponseMessage("Successful login"), HttpStatus.CREATED);
 	
-	}*/
+	}
 
 	
 }

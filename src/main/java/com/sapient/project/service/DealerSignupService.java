@@ -11,7 +11,4 @@ public interface DealerSignupService {
 	 public boolean existsMailid(String userid);
 	 public boolean existsPhoneNumber(Long userid);
 
-
-
-
 }
